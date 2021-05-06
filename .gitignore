@@ -1,0 +1,8 @@
+*.vscode
+*.code-workspace
+*.dep
+
+EWARM/settings/
+EWARM/remote
+EWARM/*.dep
+EWARM/*.ewt
