@@ -442,15 +442,15 @@ void StartAdcTask(void const * argument)
     printf("%d  ", throttleValue);
 
     AdcReadChannel(ADC_CHANNEL_12, &yawValue);
-    yawValue = map(yawValue, 370, 3530, 0, 255);
+    // yawValue = map(yawValue, 370, 3530, 0, 255);
     printf("%d        ", yawValue);
 
     AdcReadChannel(ADC_CHANNEL_3, &pitchValue);
-    pitchValue = map(pitchValue, 590, 3600, 0, 255);
+    pitchValue = map(pitchValue, 1980, 3610, 0, 255);
     printf("%d  ", pitchValue);
 
     AdcReadChannel(ADC_CHANNEL_10, &rollValue);
-    rollValue = map(rollValue, 385, 3860, 0, 255);
+    rollValue = map(rollValue, 2040, 390, 0, 255);
     printf("%d\r\n", rollValue);
 
     osDelay(100);
