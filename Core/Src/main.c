@@ -71,12 +71,27 @@ void StartBlinkTask(void const * argument);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+/**
+  * @brief  Overwrite the standard printf function
+  * @param  ch character
+  * @param  stream stream of bytes
+  * @retval sent character
+  */
 int fputc(int ch, FILE* stream)
 {
   HAL_UART_Transmit(&huart3, (uint8_t *)&ch, 1, 0xFFFF);
   return ch;
 }
 
+/**
+  * @brief  map a value from a given range to another given range
+  * @param  x the value to map
+  * @param  in_min first range min value
+  * @param  in_max first range max value
+  * @param  in_min second range min value
+  * @param  in_max second range max value
+  * @retval the mapped value
+  */
 int map(int x, int in_min, int in_max, int out_min, int out_max)
 {
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
@@ -385,6 +400,12 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+/**
+  * @brief  Read ADC value from a given channel
+  * @param  adcChannel given adc channel
+  * @param  adcValue pointer to the read value
+  * @retval HAL status
+  */
 static HAL_StatusTypeDef AdcReadChannel(uint32_t adcChannel, int *adcValue)
 {
   HAL_StatusTypeDef retVal;
@@ -422,6 +443,18 @@ static HAL_StatusTypeDef AdcReadChannel(uint32_t adcChannel, int *adcValue)
   }
   return retVal;
 }
+
+/**
+  * @brief  EXTI line detection callbacks.
+  * @param  GPIO_Pin Specifies the pins connected EXTI line
+  * @retval None
+  */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  if(BUTTON_Pin == GPIO_Pin)
+  {
+  }
+}
 /* USER CODE END 4 */
 
 /* USER CODE BEGIN Header_StartAdcTask */
@@ -438,11 +471,11 @@ void StartAdcTask(void const * argument)
   for(;;)
   {
     AdcReadChannel(ADC_CHANNEL_9, &throttleValue);
-    throttleValue = map(throttleValue, 530, 2800, 0, 255);
+    throttleValue = map(throttleValue, 530, 3400, 0, 255);
     printf("%d  ", throttleValue);
 
     AdcReadChannel(ADC_CHANNEL_12, &yawValue);
-    // yawValue = map(yawValue, 370, 3530, 0, 255);
+    yawValue = map(yawValue, 1400, 2460, 0, 255);
     printf("%d        ", yawValue);
 
     AdcReadChannel(ADC_CHANNEL_3, &pitchValue);
