@@ -406,7 +406,7 @@ static void MX_GPIO_Init(void)
   * @param  adcValue pointer to the read value
   * @retval HAL status
   */
-static HAL_StatusTypeDef AdcReadChannel(uint32_t adcChannel, int *adcValue)
+static HAL_StatusTypeDef ReadAdcChannel(uint32_t adcChannel, int *adcValue)
 {
   HAL_StatusTypeDef retVal;
   ADC_ChannelConfTypeDef sConfig = {0};
@@ -470,22 +470,15 @@ void StartAdcTask(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    AdcReadChannel(ADC_CHANNEL_9, &throttleValue);
+    ReadAdcChannel(ADC_CHANNEL_9, &throttleValue);
     throttleValue = map(throttleValue, 530, 3400, 0, 255);
-    printf("%d  ", throttleValue);
-
-    AdcReadChannel(ADC_CHANNEL_12, &yawValue);
+    ReadAdcChannel(ADC_CHANNEL_12, &yawValue);
     yawValue = map(yawValue, 1400, 2460, 0, 255);
-    printf("%d        ", yawValue);
-
-    AdcReadChannel(ADC_CHANNEL_3, &pitchValue);
+    ReadAdcChannel(ADC_CHANNEL_3, &pitchValue);
     pitchValue = map(pitchValue, 1980, 3610, 0, 255);
-    printf("%d  ", pitchValue);
-
-    AdcReadChannel(ADC_CHANNEL_10, &rollValue);
+    ReadAdcChannel(ADC_CHANNEL_10, &rollValue);
     rollValue = map(rollValue, 2040, 390, 0, 255);
-    printf("%d\r\n", rollValue);
-
+    printf("%d  %d        %d  %d\r\n", throttleValue, yawValue, pitchValue, rollValue);
     osDelay(100);
   }
   /* USER CODE END 5 */
